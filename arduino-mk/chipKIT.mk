@@ -43,7 +43,7 @@ AR_NAME = pic32-ar
 OBJDUMP_NAME = pic32-objdump
 OBJCOPY_NAME = pic32-objcopy
 
-LDSCRIPT = $(call PARSE_BOARD,$(BOARD_TAG),ldscript)
+LDSCRIPT = $(shell $(PARSE_BOARD) $(BOARD_TAG) ldscript)
 LDSCRIPT_FILE = $(ARDUINO_CORE_PATH)/$(LDSCRIPT)
 
 MCU_FLAG_NAME=mprocessor
