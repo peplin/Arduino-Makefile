@@ -37,6 +37,6 @@ Some details on the addition of chipKIT support can be found in another
 ## Contributors
 
 * Martin Oldfield (initial version)
-* Chris Peplin (chipKIT)
+* Chris Peplin
 * rei_vilo / Olivier
 * Edward Comer
