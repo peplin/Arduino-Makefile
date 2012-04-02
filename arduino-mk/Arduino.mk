@@ -186,12 +186,14 @@ endif
 # Some paths
 #
 
+OSTYPE := $(shell uname)
+
 ifeq ($(wildcard $(ARDUINO_DIR)),)
 $(error "Error: the ARDUINO_DIR variable must point to your Arduino IDE installation")
 endif
 
 ifndef AVR_TOOLS_PATH
-AVR_TOOLS_PATH    = $(ARDUINO_DIR)/hardware/tools/avr/bin/
+AVR_TOOLS_PATH    = $(ARDUINO_DIR)/hardware/tools
 endif
 
 ifndef AVRDUDE_TOOLS_PATH
@@ -383,7 +385,6 @@ AR      = $(AR_NAME)
 SIZE    = $(SIZE_NAME)
 NM      = $(NM_NAME)
 
-OSTYPE := $(shell uname)
 ifneq ($(OSTYPE),Linux)
 # Compilers distributed with the IDE in OS X and Windows, but not Linux
 CC      := $(addprefix $(AVR_TOOLS_PATH),$(CC))
