@@ -423,7 +423,10 @@ CPPFLAGS      = -$(MCU_FLAG_NAME)=$(MCU) -DF_CPU=$(F_CPU) -DARDUINO=$(ARDUINO_VE
 			$(SYS_INCLUDES) $(USER_INCLUDES) -g -Os -w -Wall \
 			-ffunction-sections -fdata-sections $(EXTRA_CPPFLAGS)
 
+ifdef USE_GNU99
 CFLAGS        = -std=gnu99
+endif 
+
 CXXFLAGS      = -fno-exceptions
 ASFLAGS       = -$(MCU_FLAG_NAME)=$(MCU) -I. -x assembler-with-cpp
 LDFLAGS       = -$(MCU_FLAG_NAME)=$(MCU) -Wl,--gc-sections -Os $(EXTRA_LDFLAGS)
