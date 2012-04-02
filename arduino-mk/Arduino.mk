@@ -375,13 +375,13 @@ ifndef NM_NAME
 NM_NAME      = avr-nm
 endif
 
-CC      = $(AVR_TOOLS_PATH)/$(CC_NAME)
-CXX     = $(AVR_TOOLS_PATH)/$(CXX_NAME)
-OBJCOPY = $(AVR_TOOLS_PATH)/$(OBJCOPY_NAME)
-OBJDUMP = $(AVR_TOOLS_PATH)/$(OBJDUMP_NAME)
-AR      = $(AVR_TOOLS_PATH)/$(AR_NAME)
-SIZE    = $(AVR_TOOLS_PATH)/$(SIZE_NAME)
-NM      = $(AVR_TOOLS_PATH)/$(NM_NAME)
+CC      = $(CC_NAME)
+CXX     = $(CXX_NAME)
+OBJCOPY = $(OBJCOPY_NAME)
+OBJDUMP = $(OBJDUMP_NAME)
+AR      = $(AR_NAME)
+SIZE    = $(SIZE_NAME)
+NM      = $(NM_NAME)
 
 OSTYPE := $(shell uname)
 ifneq ($(OSTYPE),Linux)
