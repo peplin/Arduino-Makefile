@@ -302,7 +302,6 @@ ifndef ARDUINO_SKETCHBOOK
     endif
 
     ifneq ($(ARDUINO_PREFERENCES_PATH),)
-    else
         ARDUINO_SKETCHBOOK = $(shell grep --max-count=1 --regexp="sketchbook.path=" \
                                           $(ARDUINO_PREFERENCES_PATH) | \
                                      sed -e 's/sketchbook.path=//' )
