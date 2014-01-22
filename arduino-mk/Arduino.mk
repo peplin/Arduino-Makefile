@@ -829,7 +829,7 @@ ifeq ($(CURRENT_OS), WINDOWS)
     # consistent, but the /dev/com* is not recommended by Cygwin and doesn't
     # always show up.
     COM_STYLE_MONITOR_PORT = com$(subst com,,$(MONITOR_PORT))
-    DEVICE_PATH = /dev/ttyS$(shell echo $(MONITOR_PORT) - 1 | bc)
+    DEVICE_PATH = /dev/ttyS$(shell awk 'BEGIN{ print $(MONITOR_PORT) - 1 }')
 endif
 
 # Returns the Arduino port (first wildcard expansion) if it exists, otherwise it errors.
