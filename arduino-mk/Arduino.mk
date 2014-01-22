@@ -828,8 +828,9 @@ ifeq ($(CURRENT_OS), WINDOWS)
     # for avrdude. This also could work with /dev/com* device names and be more
     # consistent, but the /dev/com* is not recommended by Cygwin and doesn't
     # always show up.
-    COM_STYLE_MONITOR_PORT = com$(subst com,,$(MONITOR_PORT))
-    DEVICE_PATH = /dev/ttyS$(shell awk 'BEGIN{ print $(MONITOR_PORT) - 1 }')
+    COM_PORT_ID = $(subst com,,$(MONITOR_PORT))
+    COM_STYLE_MONITOR_PORT = com$(COM_PORT_ID)
+    DEVICE_PATH = /dev/ttyS$(shell awk 'BEGIN{ print $(COM_PORT_ID) - 1 }')
 endif
 
 # Returns the Arduino port (first wildcard expansion) if it exists, otherwise it errors.
