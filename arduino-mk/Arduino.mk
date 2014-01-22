@@ -234,7 +234,7 @@ ifndef ARDMK_DIR
     # presume it's a level above the path to our own file
     ARDMK_DIR := $(realpath $(dir $(realpath $(lastword $(MAKEFILE_LIST))))/..)
 else
-    # show_config_variable macro is defined in Common.mk file and is not available yet. 
+    # show_config_variable macro is defined in Common.mk file and is not available yet.
     # Let's define a variable to know that user specified ARDMK_DIR
     ARDMK_DIR_MSG = USER
 endif
@@ -831,6 +831,8 @@ ifeq ($(CURRENT_OS), WINDOWS)
     COM_PORT_ID = $(subst com,,$(MONITOR_PORT))
     COM_STYLE_MONITOR_PORT = com$(COM_PORT_ID)
     DEVICE_PATH = /dev/ttyS$(shell awk 'BEGIN{ print $(COM_PORT_ID) - 1 }')
+else
+    DEVICE_PATH = $(MONITOR_PORT)
 endif
 
 # Returns the Arduino port (first wildcard expansion) if it exists, otherwise it errors.
@@ -991,7 +993,7 @@ endif
 # Default avrdude options
 # -V Do not verify
 # -q - suppress progress output
-# -D - Disable auto erase for flash memory 
+# -D - Disable auto erase for flash memory
 # (-D is needed for Mega boards. See https://github.com/sudar/Arduino-Makefile/issues/114#issuecomment-25011005)
 ifndef AVRDUDE_OPTS
     AVRDUDE_OPTS = -q -V -D
