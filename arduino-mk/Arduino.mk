@@ -991,7 +991,14 @@ ifdef AVRDUDE_CONF
     AVRDUDE_COM_OPTS += -C $(AVRDUDE_CONF)
 endif
 
-AVRDUDE_ARD_OPTS = -c $(AVRDUDE_ARD_PROGRAMMER) -b $(AVRDUDE_ARD_BAUDRATE) -P $(call get_monitor_port)
+AVRDUDE_ARD_OPTS = -c $(AVRDUDE_ARD_PROGRAMMER) -b $(AVRDUDE_ARD_BAUDRATE) -P
+ifeq ($(CURRENT_OS), WINDOWS)
+    # Using Cygwin in Windows, the MONITOR_PORT is of the format '/dev/comX' but
+    # avrdude expects only the final 'comX' part.
+    AVRDUDE_ARD_OPTS += $(subst /dev/,,$(call get_monitor_port))
+else
+    AVRDUDE_ARD_OPTS += $(call get_monitor_port)
+endif
 
 ifndef ISP_PROG
     ifneq ($(strip $(AVRDUDE_ARD_PROGRAMMER)),)
