@@ -822,8 +822,20 @@ SIZEFLAGS     ?= --mcu=$(MCU) -C
 # for backwards compatibility, grab ARDUINO_PORT if the user has it set
 MONITOR_PORT ?= $(ARDUINO_PORT)
 
+ifeq ($(CURRENT_OS), WINDOWS)
+    # Expect MONITOR_PORT to be '1' or 'com1' for COM1 in Windows. Split it up
+    # into the two styles required: /dev/ttyS* for ard-reset-arduino and com*
+    # for avrdude. This also could work with /dev/com* device names and be more
+    # consistent, but the /dev/com* is not recommended by Cygwin and doesn't
+    # always show up.
+    COM_STYLE_MONITOR_PORT = com$(subst com,,$(MONITOR_PORT))
+    DEVICE_PATH = /dev/ttyS$(shell echo $(MONITOR_PORT) - 1 | bc)
+else
+    DEVICE_PATH = $(MONITOR_PORT)
+endif
+
 # Returns the Arduino port (first wildcard expansion) if it exists, otherwise it errors.
-get_monitor_port = $(if $(wildcard $(MONITOR_PORT)),$(firstword $(wildcard $(MONITOR_PORT))),$(error Arduino port $(MONITOR_PORT) not found!))
+get_monitor_port = $(if $(wildcard $(DEVICE_PATH)),$(firstword $(wildcard $(DEVICE_PATH))),$(error Arduino port $(DEVICE_PATH) not found!))
 
 # Returns the ISP port (first wildcard expansion) if it exists, otherwise it errors.
 get_isp_port = $(if $(wildcard $(ISP_PORT)),$(firstword $(wildcard $(ISP_PORT))),$(error ISP port $(ISP_PORT) not found!))
@@ -993,9 +1005,7 @@ endif
 
 AVRDUDE_ARD_OPTS = -c $(AVRDUDE_ARD_PROGRAMMER) -b $(AVRDUDE_ARD_BAUDRATE) -P
 ifeq ($(CURRENT_OS), WINDOWS)
-    # Using Cygwin in Windows, the MONITOR_PORT is of the format '/dev/comX' but
-    # avrdude expects only the final 'comX' part.
-    AVRDUDE_ARD_OPTS += $(subst /dev/,,$(call get_monitor_port))
+    AVRDUDE_ARD_OPTS += $(COM_STYLE_MONITOR_PORT)
 else
     AVRDUDE_ARD_OPTS += $(call get_monitor_port)
 endif
