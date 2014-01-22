@@ -375,22 +375,26 @@ endif
 
 ifndef AVR_TOOLS_DIR
 
-    BUNDLED_AVR_TOOLS_DIR := $(call dir_if_exists,$(ARDUINO_DIR)/hardware/tools/avr)
+    ifeq ($(CURRENT_OS),LINUX)
+        # In Linux distribution of Arduino, the path to avrdude and avrdude.conf are different
+        # More details at https://github.com/sudar/Arduino-Makefile/issues/48 and
+        # https://groups.google.com/a/arduino.cc/d/msg/developers/D_m97jGr8Xs/uQTt28KO_8oJ
+        BUNDLED_AVR_TOOLS_DIR := $(call dir_if_exists,$(ARDUINO_DIR)/hardware/tools)
+    else
+        BUNDLED_AVR_TOOLS_DIR := $(call dir_if_exists,$(ARDUINO_DIR)/hardware/tools/avr)
+    endif
     ifdef BUNDLED_AVR_TOOLS_DIR
         AVR_TOOLS_DIR     = $(BUNDLED_AVR_TOOLS_DIR)
         $(call show_config_variable,AVR_TOOLS_DIR,[BUNDLED],(in Arduino distribution))
 
-        # In Linux distribution of Arduino, the path to avrdude and avrdude.conf are different
-        # More details at https://github.com/sudar/Arduino-Makefile/issues/48 and
-        # https://groups.google.com/a/arduino.cc/d/msg/developers/D_m97jGr8Xs/uQTt28KO_8oJ
         ifeq ($(CURRENT_OS),LINUX)
 
             ifndef AVRDUDE
-                AVRDUDE = $(AVR_TOOLS_DIR)/../avrdude
+                AVRDUDE = $(AVR_TOOLS_DIR)/avrdude
             endif
 
             ifndef AVRDUDE_CONF
-                AVRDUDE_CONF = $(AVR_TOOLS_DIR)/../avrdude.conf
+                AVRDUDE_CONF = $(AVR_TOOLS_DIR)/avrdude.conf
             endif
 
         else
@@ -724,14 +728,14 @@ TARGETS    = $(OBJDIR)/$(TARGET).*
 CORE_LIB   = $(OBJDIR)/libcore.a
 
 # Names of executables
-CC      = $(AVR_TOOLS_PATH)/$(CC_NAME)
-CXX     = $(AVR_TOOLS_PATH)/$(CXX_NAME)
-AS      = $(AVR_TOOLS_PATH)/$(AS_NAME)
-OBJCOPY = $(AVR_TOOLS_PATH)/$(OBJCOPY_NAME)
-OBJDUMP = $(AVR_TOOLS_PATH)/$(OBJDUMP_NAME)
-AR      = $(AVR_TOOLS_PATH)/$(AR_NAME)
-SIZE    = $(AVR_TOOLS_PATH)/$(SIZE_NAME)
-NM      = $(AVR_TOOLS_PATH)/$(NM_NAME)
+CC      ?= $(AVR_TOOLS_PATH)/$(CC_NAME)
+CXX     ?= $(AVR_TOOLS_PATH)/$(CXX_NAME)
+AS      ?= $(AVR_TOOLS_PATH)/$(AS_NAME)
+OBJCOPY ?= $(AVR_TOOLS_PATH)/$(OBJCOPY_NAME)
+OBJDUMP ?= $(AVR_TOOLS_PATH)/$(OBJDUMP_NAME)
+AR      ?= $(AVR_TOOLS_PATH)/$(AR_NAME)
+SIZE    ?= $(AVR_TOOLS_PATH)/$(SIZE_NAME)
+NM      ?= $(AVR_TOOLS_PATH)/$(NM_NAME)
 REMOVE  = rm -rf
 MV      = mv -f
 CAT     = cat
