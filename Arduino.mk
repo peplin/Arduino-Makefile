@@ -336,6 +336,10 @@ ifndef OBJCOPY_NAME
 OBJCOPY_NAME = avr-objcopy
 endif
 
+ifndef BIN2HEX_NAME
+BIN2HEX_NAME = avr-objdump
+endif
+
 ifndef OBJDUMP_NAME
 OBJDUMP_NAME = avr-objdump
 endif
@@ -725,6 +729,7 @@ ifndef OVERRIDE_EXECUTABLES
     CXX     = $(AVR_TOOLS_PATH)/$(CXX_NAME)
     AS      = $(AVR_TOOLS_PATH)/$(AS_NAME)
     OBJCOPY = $(AVR_TOOLS_PATH)/$(OBJCOPY_NAME)
+    BIN2HEX = $(AVR_TOOLS_PATH)/$(BIN2HEX_NAME)
     OBJDUMP = $(AVR_TOOLS_PATH)/$(OBJDUMP_NAME)
     AR      = $(AVR_TOOLS_PATH)/$(AR_NAME)
     SIZE    = $(AVR_TOOLS_PATH)/$(SIZE_NAME)
@@ -971,7 +976,7 @@ $(OBJDIR)/%.o: $(ARDUINO_CORE_PATH)/%.S $(COMMON_DEPS) | $(OBJDIR)
 # various object conversions
 $(OBJDIR)/%.hex: $(OBJDIR)/%.elf $(COMMON_DEPS)
 	@$(MKDIR) $(dir $@)
-	$(OBJCOPY) -O ihex -R .eeprom $< $@
+	-$(BIN2HEX) -a $<
 	@$(ECHO) '\n'
 	$(call avr_size,$<,$@)
 ifneq ($(strip $(HEX_MAXIMUM_SIZE)),)
@@ -983,8 +988,8 @@ endif
 
 $(OBJDIR)/%.eep: $(OBJDIR)/%.elf $(COMMON_DEPS)
 	@$(MKDIR) $(dir $@)
-	-$(OBJCOPY) -j .eeprom --set-section-flags=.eeprom="alloc,load" \
-		--change-section-lma .eeprom=0 -O ihex $< $@
+	-$(OBJCOPY) -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load \
+		--no-change-warnings --change-section-lma .eeprom=0 $< $@
 
 $(OBJDIR)/%.lss: $(OBJDIR)/%.elf $(COMMON_DEPS)
 	@$(MKDIR) $(dir $@)
