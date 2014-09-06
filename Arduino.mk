@@ -771,7 +771,7 @@ DEPS                = $(LOCAL_OBJS:.o=.d) $(LIB_OBJS:.o=.d) $(USER_LIB_OBJS:.o=.
 # You can get the list of options at http://www.nongnu.org/avr-libc/user-manual/using_tools.html#gcc_optO
 # Also read http://www.nongnu.org/avr-libc/user-manual/FAQ.html#faq_optflags
 ifndef OPTIMIZATION_LEVEL
-    OPTIMIZATION_LEVEL=s
+    OPTIMIZATION_LEVEL=2
     $(call show_config_variable,OPTIMIZATION_LEVEL,[DEFAULT])
 else
     $(call show_config_variable,OPTIMIZATION_LEVEL,[USER])
@@ -818,7 +818,7 @@ else
 endif
 
 CFLAGS        += $(EXTRA_FLAGS) $(EXTRA_CFLAGS)
-CXXFLAGS      += -fno-exceptions $(EXTRA_FLAGS) $(EXTRA_CXXFLAGS)
+CXXFLAGS      += -w -fno-exceptions $(EXTRA_FLAGS) $(EXTRA_CXXFLAGS)
 ASFLAGS       += -x assembler-with-cpp
 LDFLAGS       += -$(MCU_FLAG_NAME)=$(MCU) -Wl,--gc-sections -O$(OPTIMIZATION_LEVEL) $(EXTRA_FLAGS) $(EXTRA_CXXFLAGS) $(EXTRA_LDFLAGS)
 SIZEFLAGS     ?= --mcu=$(MCU) -C
@@ -927,7 +927,7 @@ $(OBJDIR)/%.o: %.cpp $(COMMON_DEPS) | $(OBJDIR)
 
 $(OBJDIR)/%.o: %.S $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
-	$(CC) -MMD -c $(CPPFLAGS) $(ASFLAGS) $< -o $@
+	$(CC) -MMD -c $(ASFLAGS) $< -o $@
 
 $(OBJDIR)/%.o: %.s $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
@@ -966,7 +966,7 @@ $(OBJDIR)/%.o: $(ARDUINO_CORE_PATH)/%.cpp $(COMMON_DEPS) | $(OBJDIR)
 
 $(OBJDIR)/%.o: $(ARDUINO_CORE_PATH)/%.S $(COMMON_DEPS) | $(OBJDIR)
 	@$(MKDIR) $(dir $@)
-	$(CC) -MMD -c $(CPPFLAGS) $(ASFLAGS) $< -o $@
+	$(CC) -MMD -c $(ASFLAGS) $< -o $@
 
 # various object conversions
 $(OBJDIR)/%.hex: $(OBJDIR)/%.elf $(COMMON_DEPS)

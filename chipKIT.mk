@@ -94,7 +94,7 @@ NM_NAME = pic32-nm
 OVERRIDE_EXECUTABLES = 1
 CC      = $(PIC32_TOOLS_PATH)/$(CC_NAME)
 CXX     = $(PIC32_TOOLS_PATH)/$(CXX_NAME)
-AS      = $(PIC32_TOOLS_PATH)/$(AS_NAME)
+AS      = $(PIC32_TOOLS_PATH)/$(CXX_NAME)
 OBJCOPY = $(PIC32_TOOLS_PATH)/$(OBJCOPY_NAME)
 OBJDUMP = $(PIC32_TOOLS_PATH)/$(OBJDUMP_NAME)
 AR      = $(PIC32_TOOLS_PATH)/$(AR_NAME)
@@ -109,7 +109,9 @@ LDFLAGS  += -mdebugger -mno-peripheral-libs -nostartfiles -Wl,--gc-sections
 LINKER_SCRIPTS  += -T $(ARDUINO_CORE_PATH)/$(LDSCRIPT)
 LINKER_SCRIPTS  += -T $(ARDUINO_CORE_PATH)/chipKIT-application-COMMON.ld
 CPPFLAGS += -mno-smart-io -fno-short-double -fframe-base-loclist \
-			-g3 -Wcast-align -D_BOARD_MEGA_
+			-g3 -Wcast-align -D_BOARD_MEGA_ -mdebugger -DMPIDEVER=16777998  -DMPIDE=23
 CFLAGS_STD =
 
 include $(ARDMK_DIR)/Arduino.mk
+ASFLAGS +=  -O2  -g1  -c  -Wa,--gdwarf-2  -mprocessor=32MX795F512L  -DF_CPU=80000000L  -DARDUINO=23  -D_BOARD_MEGA_    -DMPIDEVER=16777998  -DMPIDE=23 \
+        -I. -I$(ARDUINO_CORE_PATH) -I$(ARDUINO_VAR_PATH)/$(VARIANT) \
