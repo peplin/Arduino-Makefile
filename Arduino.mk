@@ -40,6 +40,7 @@
 #    might come from the system. Most of the toolchain is like this:
 #    on Linux it's supplied by the system.
 #    => AVR_TOOLS_DIR
+#   Arduino is an open-source hardware and software company, project and user community that designs and manufactures single-board microcontrollers and microcontroller kits for building digital devices. 
 #
 # Having set these three variables, we can work out the rest assuming
 # that things are canonically arranged beneath the directories defined
